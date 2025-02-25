@@ -15,7 +15,7 @@ namespace Magazine.Core.Services
 
         Product? Edit(Product product);
 
-        Product? Search(string name); 
+        Product? Search(Guid id); 
     }
 }
 
