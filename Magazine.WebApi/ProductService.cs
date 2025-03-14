@@ -1,5 +1,7 @@
 ﻿using Magazine.Core.Models;
 using Magazine.Core.Services;
+using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace Magazine.WebApi
@@ -71,13 +73,20 @@ namespace Magazine.WebApi
             return product;
         }
 
-        // Мьютекс для записи в файл
+
         private readonly Mutex _mutex = new Mutex();
 
         private void WriteToFile()
         {
             _mutex.WaitOne();
-            var json = JsonSerializer.Serialize(_products, new JsonSerializerOptions { WriteIndented = true });
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping 
+            };
+
+            var json = JsonSerializer.Serialize(_products, options);
+            
             File.WriteAllText(_dbFilePath, json);
             _mutex.ReleaseMutex();
         }

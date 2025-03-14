@@ -1,9 +1,16 @@
 {
-  "2ce09c4b-a334-444c-97bc-7b4485b94275": {
-    "Id": "2ce09c4b-a334-444c-97bc-7b4485b94275",
-    "Name": "\u041A\u0430\u043A",
-    "Definition": "\u041A\u0430\u043A\u0430\u0435",
-    "Price": 100,
-    "Image": "\u041A\u0430\u0440\u0442\u0438\u043D\u043A"
+  "399d11d3-6470-4b21-8bc7-1cfc7b05b02b": {
+    "Id": "399d11d3-6470-4b21-8bc7-1cfc7b05b02b",
+    "Name": "Phone",
+    "Definition": "desc",
+    "Price": 5000,
+    "Image": "img"
+  },
+  "625d2a4c-dec9-475a-a61b-5ffd04a6dd97": {
+    "Id": "625d2a4c-dec9-475a-a61b-5ffd04a6dd97",
+    "Name": "пук",
+    "Definition": "desc",
+    "Price": 132312,
+    "Image": "img"
   }
 }
