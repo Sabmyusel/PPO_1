@@ -19,22 +19,17 @@ namespace Magazine.Test
         public void Setup()
         {
             // Генерируем уникальное имя файла для тестовой базы
-            _tempFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".db");
+            _tempFile = "testFile.db";
+            if (File.Exists(_tempFile))
+            {
+                File.Delete(_tempFile);
+            }
             _connectionString = $"Data Source={_tempFile}";
             _database = new DataBase(_connectionString);
 
             // Создаем таблицу и индекс
             _database.ExecuteNonQuery(DataBase.CreateTableQuery);
             _database.ExecuteNonQuery(DataBase.CreateIndexQuery);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            if (File.Exists(_tempFile))
-            {
-                File.Delete(_tempFile);
-            }
         }
 
         [Test]
