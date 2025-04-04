@@ -1,16 +1,13 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using Microsoft.Data.Sqlite;
 
 namespace Magazine.Core
 {
     public class DataBase
     {
-        // Строка подключения к SQLite
         private readonly string _connectionString;
 
-        // SQL‑запросы, оформленные в виде констант
-        public const string CreateTableQuery =
+        public const string CreateTable =
             @"CREATE TABLE IF NOT EXISTS Products (
                 ID TEXT PRIMARY KEY,
                 Name TEXT NOT NULL,
@@ -19,69 +16,95 @@ namespace Magazine.Core
                 Image TEXT
             );";
 
-        public const string CreateIndexQuery =
-            @"CREATE INDEX IF NOT EXISTS IX_Products_Id ON Products(ID);";
+        public const string CreateIndex =
+            @"CREATE INDEX IF NOT EXISTS I_Products_Id ON Products(ID);";
 
         public const string SelectQuery =
             @"SELECT * FROM Products;";
 
         public const string InsertQuery =
             @"INSERT INTO Products (ID, Name, Definition, Price, Image)
-              VALUES (@ID, @Name, @Definition, @Price, @Image);";
+              VALUES ('{0}', '{1}', '{2}', '{3}', '{4}');";
 
         public const string UpdateQuery =
             @"UPDATE Products 
-              SET Name = @Name, Definition = @Definition, Price = @Price, Image = @Image 
-              WHERE ID = @ID;";
+              SET Name = '{1}', Definition = '{2}', Price = '{3}', Image = '{4}' 
+              WHERE ID = '{0}';";
+
+        public const string SearchQuery =
+            @"SELECT * FROM Products WHERE ID = '{0}';";
 
         public const string DeleteQuery =
-            @"DELETE FROM Products WHERE ID = @ID;";
+            @"DELETE FROM Products WHERE ID = '{0}';";
 
         public DataBase(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        private SqliteConnection GetConnection() => new SqliteConnection(_connectionString);
-
         /// <summary>
-        /// Выполнение запросов, не возвращающих результат (CREATE, INSERT, UPDATE, DELETE).
+        /// Выполнение запроса, не возвращающего результат (CREATE, INSERT, UPDATE, DELETE).
         /// </summary>
-        public void ExecuteNonQuery(string query, Action<SqliteCommand> parameterSetup = null)
+        public void ExecuteNonRet(string query)
         {
-            using (var connection = GetConnection())
+            SqliteConnection connection = new SqliteConnection(_connectionString);
+            try
             {
                 connection.Open();
-                using (var command = connection.CreateCommand())
+                SqliteCommand command = connection.CreateCommand();
+                try
                 {
                     command.CommandText = query;
-                    parameterSetup?.Invoke(command);
                     command.ExecuteNonQuery();
                 }
+                finally
+                {
+                    command.Dispose();
+                }
+            }
+            finally
+            {
+                connection.Close();
+                connection.Dispose();
             }
         }
 
         /// <summary>
-        /// Выполнение SELECT запроса, возвращающего DataTable.
+        /// Выполнение запроса, возвращающего DataTable.
         /// </summary>
-        public DataTable ExecuteQuery(string query, Action<SqliteCommand> parameterSetup = null)
+        public DataTable ExecuteRet(string query)
         {
-            var dt = new DataTable();
-            using (var connection = GetConnection())
+            DataTable dt = new DataTable();
+            SqliteConnection connection = new SqliteConnection(_connectionString);
+            try
             {
                 connection.Open();
-                using (var command = connection.CreateCommand())
+                SqliteCommand command = connection.CreateCommand();
+                try
                 {
                     command.CommandText = query;
-                    parameterSetup?.Invoke(command);
-                    using (var reader = command.ExecuteReader())
+                    SqliteDataReader reader = command.ExecuteReader();
+                    try
                     {
                         dt.Load(reader);
                     }
+                    finally
+                    {
+                        reader.Close();
+                        reader.Dispose();
+                    }
                 }
+                finally
+                {
+                    command.Dispose();
+                }
+            }
+            finally
+            {
+                connection.Close();
+                connection.Dispose();
             }
             return dt;
         }
     }
 }
-

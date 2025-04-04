@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using Magazine.Core.Services;
-using Magazine.Core.Models;
+﻿using Magazine.Core.Models;
 using Magazine.WebApi;
 using Microsoft.Extensions.Configuration;
-using Moq;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
-using Microsoft.AspNetCore.Mvc;
+using Magazine.Core;
+
 namespace Magazine.Test
 {
     [TestFixture]
     public class TestsProductService
     {
         private ProductService _productService;
-
+        private string _tempFile;
         [SetUp]
         public void Setup()
         {
             var conf = new Dictionary<string, string>
             {
-                { "DataBaseFilePath", "DB.txt" }
+                { "DataBaseFilePath", "TEST.db" }
             };
+
+            _tempFile = "testFile.db";
+            if (File.Exists(_tempFile))
+            {
+                File.Delete(_tempFile);
+            }
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(conf)
