@@ -1,8 +1,16 @@
+using Magazine.Core.Data;
 using Magazine.Core.Services;
 using Magazine.WebApi;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+string connectionString = builder.Configuration.GetConnectionString("Connection");
+
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connectionString));
+
+builder.Services.AddScoped<IProductService, DataBaseProductService>();
 
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
@@ -26,7 +34,7 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddSingleton<IProductService, ProductService>();
+//builder.Services.AddSingleton<IProductService, ProductService>();
 
 var app = builder.Build();
 
