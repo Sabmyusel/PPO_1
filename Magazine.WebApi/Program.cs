@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 string connectionString = builder.Configuration.GetConnectionString("Connection");
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connectionString));
-
+Console.WriteLine($"Using SQLite database at: {connectionString}");
 builder.Services.AddScoped<IProductService, DataBaseProductService>();
 
 builder.Services.AddOpenApi();

@@ -28,6 +28,7 @@ namespace Magazine.WebApi.Controllers
         [HttpPost("{name},{price}")]
         public Product Add(string name, float price, string description = "desc", string image = "img")
         {
+            Console.WriteLine($"Database file exists: {System.IO.File.Exists("/prog/data/products.db")}");
             if (string.IsNullOrEmpty(description) || price < 0)
             {
                 return null;
