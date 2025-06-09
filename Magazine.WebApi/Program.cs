@@ -37,11 +37,6 @@ builder.Services.AddCors(options =>
 //builder.Services.AddSingleton<IProductService, ProductService>();
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-    context.Database.Migrate();
-}
 //if (app.Environment.IsDevelopment())
 //{
 app.UseSwagger();
