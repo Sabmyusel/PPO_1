@@ -11,8 +11,8 @@ namespace Magazine.Core.Data
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options):base(options)
         {
-            Database.EnsureCreated();
-            //Database.Migrate();
+            //Database.EnsureCreated();
+            Database.Migrate();
         }
     }
 }
