@@ -15,7 +15,7 @@ namespace Magazine.WebApi
             _configuration = configuration;
             _dbFilePath = _configuration["DataBaseFilePath"];
 
-            string connectionString = $"Data Source={_dbFilePath};Pooling=False";
+            string connectionString = $"Data Source={_dbFilePath}";
 
             _database = new DataBase(connectionString);
 
