@@ -2,14 +2,14 @@ using Magazine.Core.Data;
 using Magazine.Core.Services;
 using Magazine.WebApi;
 using Microsoft.EntityFrameworkCore;
-
+using static System.Runtime.InteropServices.JavaScript.JSType;
 var builder = WebApplication.CreateBuilder(args);
 
 
-string connectionString = builder.Configuration.GetConnectionString("Connection");
+string connectionString = "Data Source=/prog/data/database.db";
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connectionString));
-Console.WriteLine($"Using SQLite database at: {connectionString}");
+Console.WriteLine($"Using SQLite database at:", connectionString);
 builder.Services.AddScoped<IProductService, DataBaseProductService>();
 
 builder.Services.AddOpenApi();
